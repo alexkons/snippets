@@ -49,3 +49,62 @@ git_color() {
         fi
     fi
 }
+
+#---------------------------------------------------------------------------------------------------------------------------------------
+#   2.  MAKE TERMINAL BETTER
+#---------------------------------------------------------------------------------------------------------------------------------------
+
+# Misc Commands
+alias resource='source ~/.bash_profile'                                         # Source bash_profile
+alias ll='ls -alh'                                                              # List files
+alias llr='ls -alhr'                                                            # List files (reverse)
+alias lls='ls -alhS'                                                            # List files by size
+alias llsr='ls -alhSr'                                                          # List files by size (reverse)
+alias lld='ls -alht'                                                            # List files by date
+alias lldr='ls -alhtr'                                                          # List files by date (reverse)
+alias lldc='ls -alhtU'                                                          # List files by date created
+alias lldcr='ls -alhtUr'                                                        # List files by date created (reverse)
+h() { history | grep "$1"; }                                                    # Shorthand for `history` with added grepping
+
+disk-usage() { du -hs "$@" | sort -nr; }                                        # List disk usage of all the files in a directory (use -hr to sort on server)
+dirdiff() { diff -u <( ls "$1" | sort)  <( ls "$2" | sort ); }                  # Compare the contents of 2 directories
+
+#---------------------------------------------------------------------------------------------------------------------------------------
+#   3.  FOLDER MANAGEMENT
+#---------------------------------------------------------------------------------------------------------------------------------------
+
+# Clear a directory
+cleardir() {
+    while true; do
+        read -ep 'Completely clear current directory? [y/N] ' response
+        case $response in
+            [Yy]* )
+                bash -c 'rm -rfv ./*'
+                bash -c 'rm -rfv ./.*'
+                break;;
+            * )
+                echo 'Skipped clearing the directory...'
+                break;;
+        esac
+    done
+}
+
+mktar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }    # Creates a *.tar.gz archive of a file or folder
+mkzip() { zip -r "${1%%/}.zip" "$1" ; }               # Create a *.zip archive of a file or folder
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------
+#   4.  MISC ALIAS'
+#---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Start a web server to share the files in the current directory
+startserver() {
+    # PHP
+    path="$1"
+    if [ -z "$path" ]; then
+        path="."
+    fi
+    open http://localhost:3000
+    php -t $path -S localhost:3000
+}
